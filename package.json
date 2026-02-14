@@ -1,0 +1,27 @@
+{
+  "name": "wysa_backend_assignment",
+  "version": "1.0.0",
+  "description": "Backend system for managing a modular, dynamic question-based conversation flow with state tracking and history management.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jivakys/wysa.git"
+  },
+  "author": "jivakys",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jivakys/wysa/issues"
+  },
+  "homepage": "https://github.com/jivakys/wysa#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
