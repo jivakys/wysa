@@ -1,11 +1,14 @@
 const express = require("express");
 const conversationRouter = express.Router();
+const { auth } = require("../middlewares/authMiddleware");
 const {
   start,
   respond,
   sync,
   getHistory,
 } = require("../controllers/flowController");
+
+conversationRouter.use(auth);
 
 // Start a conversation
 conversationRouter.post("/start", start);

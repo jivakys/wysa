@@ -1,12 +1,11 @@
-const FlowService = require("../services/FlowService");
+const FlowService = require("../services/flowServices");
 
 const start = async (req, res) => {
   try {
-    const { userId, moduleId } = req.body;
-    if (!userId || !moduleId) {
-      return res
-        .status(400)
-        .json({ error: "userId and moduleId are required" });
+    const userId = req.user._id;
+    const { moduleId } = req.body;
+    if (!moduleId) {
+      return res.status(400).json({ error: "moduleId is required" });
     }
     const question = await FlowService.startModule(userId, moduleId);
     res.status(200).json(question);
@@ -17,11 +16,10 @@ const start = async (req, res) => {
 
 const respond = async (req, res) => {
   try {
-    const { userId, optionId } = req.body;
-    if (!userId || !optionId) {
-      return res
-        .status(400)
-        .json({ error: "userId and optionId are required" });
+    const userId = req.user._id;
+    const { optionId } = req.body;
+    if (!optionId) {
+      return res.status(400).json({ error: "optionId is required" });
     }
     const nextStep = await FlowService.processResponse(userId, optionId);
     res.status(200).json(nextStep);
@@ -32,11 +30,10 @@ const respond = async (req, res) => {
 
 const sync = async (req, res) => {
   try {
-    const { userId, questionId } = req.query;
-    if (!userId || !questionId) {
-      return res
-        .status(400)
-        .json({ error: "userId and questionId are required" });
+    const userId = req.user._id;
+    const { questionId } = req.query;
+    if (!questionId) {
+      return res.status(400).json({ error: "questionId is required" });
     }
     const currentQuestion = await FlowService.syncToQuestion(
       userId,
@@ -50,7 +47,7 @@ const sync = async (req, res) => {
 
 const getHistory = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user._id;
     const history = await FlowService.getHistory(userId);
     res.status(200).json(history);
   } catch (error) {
