@@ -4,7 +4,8 @@
   "description": "Backend system for managing a modular, dynamic question-based conversation flow with state tracking and history management.",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
