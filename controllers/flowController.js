@@ -1,11 +1,5 @@
 const FlowService = require("../services/FlowService");
 
-/**
- * Controller handles the "View" (JSON responses) and maps
- * HTTP requests to Service logic.
- * Using factory functions for simplicity.
- */
-
 const start = async (req, res) => {
   try {
     const { userId, moduleId } = req.body;
