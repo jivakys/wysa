@@ -3,9 +3,7 @@ const Question = require("../models/questionModel");
 const UserSession = require("../models/userSessionModel");
 const History = require("../models/historyModel");
 
-/**
- * Internal helper to log history
- */
+//  Internal helper to log history
 const _logHistory = async (userId, questionId, optionId, moduleId) => {
   return History.create({
     user_id: userId,
@@ -15,9 +13,8 @@ const _logHistory = async (userId, questionId, optionId, moduleId) => {
   });
 };
 
-/**
- * Requirement 1: Start a module
- */
+//  Requirement 1: Start a module
+
 const startModule = async (userId, moduleId) => {
   const module = await Module.findById(moduleId);
   if (!module) throw new Error("Module not found");
@@ -81,9 +78,8 @@ const processResponse = async (userId, optionId) => {
   return nextQuestion;
 };
 
-/**
- * Requirement 6: Handle deep links
- */
+//  Requirement 6: Handle deep links
+
 const syncToQuestion = async (userId, requestedQuestionId) => {
   const session = await UserSession.findById(userId);
   if (!session) throw new Error("User has no active session");
@@ -110,9 +106,8 @@ const syncToQuestion = async (userId, requestedQuestionId) => {
   return Question.findById(session.current_question_id);
 };
 
-/**
- * Requirement 4: Complete conversation history
- */
+//  Requirement 4: Complete conversation history
+
 const getHistory = async (userId) => {
   return History.find({ user_id: userId }).sort({ timestamp: 1 });
 };
