@@ -16,7 +16,7 @@ const start = async (req, res) => {
 
 const respond = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user._id.toString();
     const { optionId } = req.body;
     if (!optionId) {
       return res.status(400).json({ error: "optionId is required" });

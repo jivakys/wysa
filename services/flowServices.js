@@ -2,6 +2,7 @@ const Module = require("../models/moduleModel");
 const Question = require("../models/questionModel");
 const UserSession = require("../models/userSessionModel");
 const History = require("../models/historyModel");
+const mongoose = require("mongoose");
 
 //  Internal helper to log history
 const _logHistory = async (userId, questionId, optionId, moduleId) => {
@@ -68,6 +69,12 @@ const processResponse = async (userId, optionId) => {
   if (!currentQuestion) throw new Error("Current question state lost");
 
   // Requirement 7: Defensive - Invalid options
+  console.log(
+    `User ${userId} is on question ${session.current_question_id}. options:`,
+    currentQuestion.options.map((o) => o._id),
+  );
+  console.log(`Requested optionId: ${optionId}`);
+
   const option = currentQuestion.options.id(optionId);
   if (!option) throw new Error("Invalid option for this question");
 
