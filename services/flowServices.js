@@ -22,21 +22,39 @@ const startModule = async (userId, moduleId) => {
   const firstQuestion = await Question.findOne({ module_id: moduleId });
   if (!firstQuestion) throw new Error("No questions found in this module");
 
-  // Requirement 4: Maintain active state
-  await UserSession.findByIdAndUpdate(
-    userId,
-    {
-      current_question_id: firstQuestion._id,
-      current_module_id: moduleId,
-      $set: { [`context_by_module.${moduleId}`]: {} },
-    },
-    { upsert: true },
-  );
+  // Start Mongoose Transaction
+  const mongooseSession = await mongoose.startSession();
+  mongooseSession.startTransaction();
 
-  // Requirement 4: Maintain complete history
-  await _logHistory(userId, firstQuestion._id, null, moduleId);
+  try {
+    // Requirement 4: Maintain active state
+    await UserSession.findByIdAndUpdate(
+      userId,
+      {
+        current_question_id: firstQuestion._id,
+        current_module_id: moduleId,
+        $set: { [`context_by_module.${moduleId}`]: {} },
+      },
+      { upsert: true, session: mongooseSession },
+    );
 
-  return firstQuestion;
+    // Requirement 4: Maintain complete history
+    await _logHistory(
+      userId,
+      firstQuestion._id,
+      null,
+      moduleId,
+      mongooseSession,
+    );
+
+    await mongooseSession.commitTransaction();
+    return firstQuestion;
+  } catch (error) {
+    await mongooseSession.abortTransaction();
+    throw error;
+  } finally {
+    mongooseSession.endSession();
+  }
 };
 
 /**
@@ -72,10 +90,32 @@ const processResponse = async (userId, optionId) => {
     updateData[`context_by_module.${targetModuleId}`] = {};
   }
 
-  await UserSession.findByIdAndUpdate(userId, { $set: updateData });
-  await _logHistory(userId, nextQuestionId, optionId, targetModuleId);
+  // Start Mongoose Transaction
+  const mongooseSession = await mongoose.startSession();
+  mongooseSession.startTransaction();
 
-  return nextQuestion;
+  try {
+    await UserSession.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { session: mongooseSession },
+    );
+    await _logHistory(
+      userId,
+      nextQuestionId,
+      optionId,
+      targetModuleId,
+      mongooseSession,
+    );
+
+    await mongooseSession.commitTransaction();
+    return nextQuestion;
+  } catch (error) {
+    await mongooseSession.abortTransaction();
+    throw error;
+  } finally {
+    mongooseSession.endSession();
+  }
 };
 
 //  Requirement 6: Handle deep links
