@@ -6,6 +6,7 @@ const {
   respond,
   sync,
   getHistory,
+  goBack,
 } = require("../controllers/flowController");
 
 conversationRouter.use(auth);
@@ -18,6 +19,9 @@ conversationRouter.post("/respond", respond);
 
 // Deep link validation
 conversationRouter.get("/sync", sync);
+
+// Go back to the previous question
+conversationRouter.post("/back", goBack);
 
 // Get user journey
 conversationRouter.get("/history", getHistory);

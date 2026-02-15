@@ -55,9 +55,20 @@ const getHistory = async (req, res) => {
   }
 };
 
+const goBack = async (req, res) => {
+  try {
+    const userId = req.user._id.toString();
+    const prevQuestion = await FlowService.goBack(userId);
+    res.status(200).json(prevQuestion);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   start,
   respond,
   sync,
   getHistory,
+  goBack,
 };
