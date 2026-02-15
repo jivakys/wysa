@@ -20,7 +20,9 @@ const startModule = async (userId, moduleId) => {
   const module = await Module.findById(moduleId);
   if (!module) throw new Error("Module not found");
 
-  const firstQuestion = await Question.findOne({ module_id: moduleId });
+  const firstQuestion = await Question.findOne({ module_id: moduleId }).sort({
+    _id: 1,
+  });
   if (!firstQuestion) throw new Error("No questions found in this module");
 
   // Start Mongoose Transaction

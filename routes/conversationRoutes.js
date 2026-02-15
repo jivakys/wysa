@@ -20,6 +20,6 @@ conversationRouter.post("/respond", respond);
 conversationRouter.get("/sync", sync);
 
 // Get user journey
-conversationRouter.get("/history/:userId", getHistory);
+conversationRouter.get("/history", getHistory);
 
 module.exports = conversationRouter;
