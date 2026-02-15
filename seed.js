@@ -18,121 +18,173 @@ const seedPracticeQuiz = async () => {
 
     // 1. Create Learning Modules
     await Module.create([
-      { _id: "mod_node", name: "Node.js Basics" },
+      { _id: "mod_node", name: "Node.js Core" },
       { _id: "mod_express", name: "Express.js Framework" },
-      { _id: "mod_mongodb", name: "MongoDB Fundamentals" },
+      { _id: "mod_mongodb", name: "MongoDB & Mongoose" },
     ]);
 
     // 2. Create Questions for Node.js
     await Question.create([
       {
-        _id: "node_q1",
+        _id: "node_01",
         module_id: "mod_node",
-        text: "What is Node.js?",
+        text: "Which of the following describes Node.js correctly?",
         options: [
           {
-            _id: "n1_opt1",
-            label: "A JavaScript Runtime built on Chrome V8",
-            next_question_id: "node_q2",
+            _id: "n1_o1",
+            label: "Single-threaded, non-blocking I/O",
+            next_question_id: "node_02",
           },
           {
-            _id: "n1_opt2",
-            label: "A Frontend Framework",
-            next_question_id: "node_q1",
-          }, // Loops back on wrong answer
+            _id: "n1_o2",
+            label: "Multi-threaded, blocking I/O",
+            next_question_id: "node_01",
+          },
           {
-            _id: "n1_opt3",
-            label: "A Type of Database",
-            next_question_id: "node_q1",
+            _id: "n1_o3",
+            label: "A Browser-based JavaScript library",
+            next_question_id: "node_01",
           },
         ],
       },
       {
-        _id: "node_q2",
+        _id: "node_02",
         module_id: "mod_node",
-        text: "Which core module is used to handle file paths?",
+        text: "What is the purpose of 'package.json' in a Node project?",
         options: [
-          { _id: "n2_opt1", label: "fs", next_question_id: "node_q2" },
-          { _id: "n2_opt2", label: "path", next_question_id: "node_q3" },
-          { _id: "n2_opt3", label: "url", next_question_id: "node_q2" },
+          {
+            _id: "n2_o1",
+            label: "To store database credentials",
+            next_question_id: "node_02",
+          },
+          {
+            _id: "n2_o2",
+            label: "To list dependencies and scripts",
+            next_question_id: "node_03",
+          },
+          {
+            _id: "n2_o3",
+            label: "To compile JavaScript into C++",
+            next_question_id: "node_02",
+          },
         ],
       },
       {
-        _id: "node_q3",
+        _id: "node_03",
         module_id: "mod_node",
-        text: "Node.js is single-threaded. True or False?",
+        text: "Which command is used to initialize a new Node.js project?",
         options: [
+          { _id: "n3_o1", label: "node start", next_question_id: "node_03" },
           {
-            _id: "n3_opt1",
-            label: "True",
-            next_question_id: "exp_q1",
+            _id: "n3_o2",
+            label: "npm init",
+            next_question_id: "exp_01",
             target_module_id: "mod_express",
           },
-          { _id: "n3_opt2", label: "False", next_question_id: "node_q3" },
         ],
       },
     ]);
 
-    // 3. Create Questions for Express.js (Module Switch Happens Here)
+    // 3. Create Questions for Express.js (Module Switch 1)
     await Question.create([
       {
-        _id: "exp_q1",
+        _id: "exp_01",
         module_id: "mod_express",
-        is_checkpoint: true, // Reset context to focus on Express
-        text: 'In Express, what is "Middleware"?',
+        is_checkpoint: true,
+        text: "What is the correct way to import 'express' in your app?",
         options: [
           {
-            _id: "e1_opt1",
-            label: "A function with access to req and res objects",
-            next_question_id: "exp_q2",
+            _id: "e1_o1",
+            label: "const express = require('express');",
+            next_question_id: "exp_02",
           },
           {
-            _id: "e1_opt2",
-            label: "A type of database",
-            next_question_id: "exp_q1",
+            _id: "e1_o2",
+            label: "npm install express",
+            next_question_id: "exp_01",
           },
         ],
       },
       {
-        _id: "exp_q2",
+        _id: "exp_02",
         module_id: "mod_express",
-        text: "Which method is used to define a POST route?",
+        text: "Which function is used to serve static files in Express?",
         options: [
           {
-            _id: "e2_opt1",
-            label: "app.post()",
-            next_question_id: "mongo_q1",
+            _id: "e2_o1",
+            label: "express.static()",
+            next_question_id: "exp_03",
+          },
+          { _id: "e2_o2", label: "app.serve()", next_question_id: "exp_02" },
+        ],
+      },
+      {
+        _id: "exp_03",
+        module_id: "mod_express",
+        text: "In the code 'app.get('/', (req, res) => ...)', what is 'res' used for?",
+        options: [
+          {
+            _id: "e3_o1",
+            label: "To read the incoming data",
+            next_question_id: "exp_03",
+          },
+          {
+            _id: "e3_o2",
+            label: "To send a response to the client",
+            next_question_id: "mongo_01",
             target_module_id: "mod_mongodb",
           },
-          { _id: "e2_opt2", label: "app.get()", next_question_id: "exp_q2" },
         ],
       },
     ]);
 
-    // 4. Create Questions for MongoDB
+    // 4. Create Questions for MongoDB (Module Switch 2)
     await Question.create([
       {
-        _id: "mongo_q1",
+        _id: "mongo_01",
         module_id: "mod_mongodb",
-        text: "MongoDB is a _____ database.",
+        is_checkpoint: true,
+        text: "What does 'Mongoose' do in a Node.js/MongoDB application?",
         options: [
-          { _id: "m1_opt1", label: "Relational", next_question_id: "mongo_q1" },
           {
-            _id: "m1_opt2",
-            label: "NoSQL (Document-based)",
-            next_question_id: "mongo_end",
+            _id: "m1_o1",
+            label: "It is the database engine itself",
+            next_question_id: "mongo_01",
+          },
+          {
+            _id: "m1_o2",
+            label: "It provides a schema-based solution for data modeling",
+            next_question_id: "mongo_02",
           },
         ],
       },
       {
-        _id: "mongo_end",
+        _id: "mongo_02",
         module_id: "mod_mongodb",
-        text: "🎉 Congratulations! You have completed the Full Stack Roadmap. Ready to build?",
+        text: "Which Mongoose method is used to find a single document by its ID?",
+        options: [
+          { _id: "m2_o1", label: "findById()", next_question_id: "mongo_03" },
+          { _id: "m2_o2", label: "getById()", next_question_id: "mongo_02" },
+        ],
+      },
+      {
+        _id: "mongo_03",
+        module_id: "mod_mongodb",
+        text: "What is a 'Collection' in MongoDB comparable to in SQL databases?",
+        options: [
+          { _id: "m3_o1", label: "A Row", next_question_id: "mongo_03" },
+          { _id: "m3_o2", label: "A Table", next_question_id: "final_end" },
+        ],
+      },
+      {
+        _id: "final_end",
+        module_id: "mod_mongodb",
+        text: "� Master Level Reached! You have cleared all Node, Express, and MongoDB modules. Start building your dream project!",
         options: [],
       },
     ]);
 
-    console.log("Database seeded with Developer Practice Quiz!");
+    console.log("Database seeded with Expanded Practice Quiz!");
     process.exit(0);
   } catch (error) {
     console.error("Seeding error:", error);
