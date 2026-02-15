@@ -103,7 +103,3 @@ Backend system for managing a modular, dynamic question-based conversation flow 
 - **Transaction Safety**: All state-changing operations in `flowServices.js` are wrapped in Mongoose sessions. If the history log fails, the session update is rolled back automatically.
 
 ---
-
-## 👨‍💻 Author
-
-**jivakys**
