@@ -161,13 +161,11 @@ const getHistory = async (userId) => {
   return History.find({ user_id: userId }).sort({ timestamp: 1 });
 };
 
-/**
- * Bonus: Allow users to go back to the previous question within the current module
- */
+// Allow users to go back to the previous question within the current module
+
 const goBack = async (userId) => {
   const session = await UserSession.findById(userId);
   if (!session) throw new Error("No active session.");
-
   // Find history for the current user and module, sorted by latest first
   // We need at least 2 entries to go back (current + previous)
   const history = await History.find({
@@ -178,7 +176,6 @@ const goBack = async (userId) => {
   if (history.length < 2) {
     throw new Error("No previous question found in the current module.");
   }
-
   // The 2nd latest entry is the previous question
   const prevEntry = history[1];
   const prevQuestion = await Question.findById(prevEntry.question_id);
